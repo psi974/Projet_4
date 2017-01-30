@@ -1,0 +1,4 @@
+services:
+#    md_l_billetterie.example:
+#        class: MdL\BilletterieBundle\Example
+#        arguments: ["@service_id", "plain_value", "%parameter%"]

@@ -1,0 +1,5 @@
+#Page d'accueil Billetterie
+mdl_billetterie_home:
+    path:    /
+    defaults:
+        _controller: MdLBilletterieBundle:SelectBillet:index

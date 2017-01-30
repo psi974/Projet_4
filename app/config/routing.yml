@@ -1,0 +1,3 @@
+mdl_billetterie:
+    resource: "@MdLBilletterieBundle/Resources/config/routing.yml"
+    prefix:    /
