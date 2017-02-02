@@ -2,23 +2,65 @@
 {% extends "MdLBilletterieBundle::layout.html.twig" %}
 
 {% block mdlbilletterie_body %}
-    <body class="container">
-    <div class="row">
-        <h1>Ticket's !</h1>
-    </div>
-    <div class="row">
-        <button href="#" id="add_ticket" class="btn btn-default">Ajouter 1 billet</button>
-    </div>
-    <div class="row">
-        <div class="col-sm-4 col-sm-offset-4">
-            <div class="text-center">
-                <h1 >Tarif =<span id="thePrice"></span></h1>
+    <div class="container">
+        <div class="jumbotron">
+            <div class="row">
+                <h1>Sélectionnez vos billets d'entrée pour le musée du Louvre</h1>
             </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-4 col-sm-offset-4">
+            <div class="row">
+                <button href="#" id="add_ticket" class="btn btn-default">Ajouter 1 billet</button>
+                <div class="center align">
 
+                    <!--Formulaire--->
+                    <div id="myForm">
+                        {{ form_start(form) }}
+                        <div class="form-group">
+                            {{form_label(form.dtvisite, "Date et Heure de la visite") }}
+                            {{ form_widget(form.dtvisite, {'attr': {'placeholder': 'Cliquer pour ajouter une date et l\'heure', 'class':'js-datepicker form-control'}}) }}
+                        </div>
+                        {{ form_row(form.nom) }}
+                        {{ form_row(form.prenom) }}
+
+                        {{ form_widget(form.prix,{'attr': {'class': 'prix'}} ) }}
+                        {{ form_row(form.dtnaiss) }}
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-4 col-sm-offset-4">
+                    <div class="text-center">
+                        <h1 >Tarif =<span id="thePrice"></span></h1>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-4 col-sm-offset-4">
+                    <div class="text-center">
+                        {{ form_widget(form.save, {'attr': {'class': 'btn btn-primary'}}) }}
+
+                    </div>
+                </div>
+            </div>
+
+            {{ form_end(form) }}
+
+            {% if lesBillets %}
+                <div class="row">
+                    <div class="center align">
+                        <div id="mdl_billetteriebundle_billet_reduction" data-prototype="<div>
+                                <label for=&quot;mdl_billetteriebundle_billet_reduction___name__&quot;>__name__label__</label>
+                                <input type=&quot;checkbox&quot; id=&quot;mdl_billetteriebundle_billet_reduction___name__&quot; name=&quot;mdl_billetteriebundle_billet[reduction][__name__]&quot; value=&quot;1&quot; /></div>">
+                        </div>
+                        {% for billet in lesBillets %}
+                            <p>nom : {{billet.nom}}</p>
+                            <p> prenom : {{billet.prenom}}</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
         </div>
     </div>
 

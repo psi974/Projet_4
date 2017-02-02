@@ -4,17 +4,31 @@
 
 namespace MdL\BilletterieBundle\Controller;
 
-use Eniams\TicketBundle\Form\TicketType;
-use MdL\BilletterieBundle\Entity\SelectBillet;
+use MdL\BilletterieBundle\Form\BilletType;
+use MdL\BilletterieBundle\Entity\Billet;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class SelectBilletController extends Controller
 {
-	public function indexAction()
-    {
-        return $this->render('MdLBilletterieBundle:SelectBillet:index.html.twig');
+    public function indexAction(Request $request)
+    {   $em = $this->getDoctrine()->getManager();
+        $lesBillets = $em->getRepository('MdLBilletterieBundle:Billet')->findAll();
+        $billet = new Billet();
+        $form = $this->createForm(BilletType::class, $billet);
+        $form->handleRequest($request);
+        if($request->isMethod('POST'))
+        {
+            $dateResa = $_POST['mdl_billetteriebundle_billet']['dtvisite'];
+            $billet->setDtvisite($dateResa);
+            var_dump($billet);die();
+            $em->persist($billet);
+            $em->flush();
+        }
+        return $this->render('MdLBilletterieBundle:SelectBillet:index.html.twig',
+            array('form' => $form->createView(),
+                'lesBillets' => $lesBillets
+            ));
     }
 }
