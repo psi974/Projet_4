@@ -2,66 +2,83 @@
 {% extends "MdLBilletterieBundle::layout.html.twig" %}
 
 {% block mdlbilletterie_body %}
-    <div class="container">
-        <div class="jumbotron">
-            <div class="row">
-                <h1>Sélectionnez vos billets d'entrée pour le musée du Louvre</h1>
-            </div>
-            <div class="row">
-                <button href="#" id="add_ticket" class="btn btn-default">Ajouter 1 billet</button>
-                <div class="center align">
 
-                    <!--Formulaire--->
-                    <div id="myForm">
-                        {{ form_start(form) }}
-                        <div class="form-group">
-                            {{form_label(form.dtvisite, "Date et Heure de la visite") }}
-                            {{ form_widget(form.dtvisite, {'attr': {'placeholder': 'Cliquer pour ajouter une date et l\'heure', 'class':'js-datepicker form-control'}}) }}
-                        </div>
-                        {{ form_row(form.nom) }}
-                        {{ form_row(form.prenom) }}
-
-                        {{ form_widget(form.prix,{'attr': {'class': 'prix'}} ) }}
-                        {{ form_row(form.dtnaiss) }}
-                    </div>
-
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-sm-4 col-sm-offset-4">
-                    <div class="text-center">
-                        <h1 >Tarif =<span id="thePrice"></span></h1>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-sm-4 col-sm-offset-4">
-                    <div class="text-center">
-                        {{ form_widget(form.save, {'attr': {'class': 'btn btn-primary'}}) }}
-
-                    </div>
-                </div>
-            </div>
-
-            {{ form_end(form) }}
-
-            {% if lesBillets %}
-                <div class="row">
-                    <div class="center align">
-                        <div id="mdl_billetteriebundle_billet_reduction" data-prototype="<div>
-                                <label for=&quot;mdl_billetteriebundle_billet_reduction___name__&quot;>__name__label__</label>
-                                <input type=&quot;checkbox&quot; id=&quot;mdl_billetteriebundle_billet_reduction___name__&quot; name=&quot;mdl_billetteriebundle_billet[reduction][__name__]&quot; value=&quot;1&quot; /></div>">
-                        </div>
-                        {% for billet in lesBillets %}
-                            <p>nom : {{billet.nom}}</p>
-                            <p> prenom : {{billet.prenom}}</p>
-                        {% endfor %}
-                    </div>
-                </div>
-            {% endif %}
-        </div>
+    <div class="well">
+        <h2 class="text-center">Sélectionnez vos billets d'entrée pour le musée du Louvre</h2>
+        <!--Formulaire Commande-->
+        {{form(form)}}
+        <!--Formulaire Billet-->
+        {{ form_row(form.billets) }}
+        <a href="#" id="add_billet" class="btn btn-default">Ajouter un billet</a>
     </div>
+
+    <!--Gestion des ajouts de billets-->
+    <script src="{{ asset('bundles/mdlbilletterie/js/jquery.js') }}"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            // Récupération du « data-prototype ».
+            var $container = $('div#mdl_billetteriebundle_commande_billets');
+
+            // Définition du compteur unique pour nommer les champs ajouté dynamiquement
+            var index = $container.find(':input').length;
+
+            // Ajout nouveau champ / Clic d'ajout.
+            $('#add_billet').click(function(e) {
+                addBillet($container);
+
+                e.preventDefault();
+                return false;
+            });
+
+            // Ajout automatique du premier champs
+            if (index == 0) {
+                addBillet($container);
+            } else {
+                // Ajout du lien de suppression sur les billet existants
+                $container.children('div').each(function() {
+                    addDeleteLink($(this));
+                });
+            }
+
+            // Fonction d'ajout formulaire BilletType
+            function addBillet($container) {
+                // Modification du contenu « data-prototype »:
+                // label du champs => "__name__label__"
+                // numéro de champs => "__name__"
+                var template = $container.attr('data-prototype')
+                        .replace(/__name__label__/g, 'Billet n°' + (index+1))
+                        .replace(/__name__/g,        index)
+                    ;
+
+                // Création de l'objet JQ pour le template
+                var $prototype = $(template);
+
+                // Lien de suppression du billet
+                addDeleteLink($prototype);
+
+                // Ajout du nouveau prototype
+                $container.append($prototype);
+
+                // Incrémentation du compteur d'ajout
+                index++;
+            }
+
+            // Fonction d'ajout du ien de suppression de billet
+            function addDeleteLink($prototype) {
+                // Création du lien
+                var $deleteLink = $('<a href="#" class="btn btn-danger">Supprimer</a>');
+
+                // Ajout du lien
+                $prototype.append($deleteLink);
+
+                // Ajout du listener sur le clic du lien pour supprimer la catégorie
+                $deleteLink.click(function(e) {
+                    $prototype.remove();
+                    e.preventDefault();
+                    return false;
+                });
+            }
+        });
+    </script>
 
 {% endblock %}

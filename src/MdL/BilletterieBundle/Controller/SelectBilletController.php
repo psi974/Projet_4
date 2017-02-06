@@ -4,31 +4,39 @@
 
 namespace MdL\BilletterieBundle\Controller;
 
-use MdL\BilletterieBundle\Form\BilletType;
-use MdL\BilletterieBundle\Entity\Billet;
+use MdL\BilletterieBundle\Entity\Commande;
+use MdL\BilletterieBundle\Form\CommandeType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 class SelectBilletController extends Controller
 {
     public function indexAction(Request $request)
-    {   $em = $this->getDoctrine()->getManager();
-        $lesBillets = $em->getRepository('MdLBilletterieBundle:Billet')->findAll();
-        $billet = new Billet();
-        $form = $this->createForm(BilletType::class, $billet);
-        $form->handleRequest($request);
-        if($request->isMethod('POST'))
-        {
-            $dateResa = $_POST['mdl_billetteriebundle_billet']['dtvisite'];
-            $billet->setDtvisite($dateResa);
-            var_dump($billet);die();
-            $em->persist($billet);
+    {
+        // Formulaire
+        $commande = new Commande();
+        $form = $this->get('form.factory')->create(CommandeType::class, $commande);
+
+
+        if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+
+            // Pour test
+
+            var_dump($commande);die();
+
+            $em->persist($commande);
             $em->flush();
-        }
-        return $this->render('MdLBilletterieBundle:SelectBillet:index.html.twig',
-            array('form' => $form->createView(),
-                'lesBillets' => $lesBillets
+
+            $request->getSession()->getFlashBag()->add('notice', 'Commande bien enregistrée.');
+
+            return $this->render('MdLBilletterieBundle:SelectBillet:index.html.twig', array(
+                'form' => $form->createView(),
             ));
+        }
+        // Formulaire invalide
+        return $this->render('MdLBilletterieBundle:SelectBillet:index.html.twig', array(
+            'form' => $form->createView(),
+        ));
     }
 }
