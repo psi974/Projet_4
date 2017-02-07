@@ -2,14 +2,19 @@
 {% extends "MdLBilletterieBundle::layout.html.twig" %}
 
 {% block mdlbilletterie_body %}
+    <!--Entete de la page-->
+    <div class="jumbotron">
+        <h1 class="text-center">Billetterie du musée du Louvre</h1>
+    </div>
 
+    <!--Formulaire de sélection des billets-->
     <div class="well">
         <h2 class="text-center">Sélectionnez vos billets d'entrée pour le musée du Louvre</h2>
         <!--Formulaire Commande-->
         {{form(form)}}
         <!--Formulaire Billet-->
+        <a href="#" id="add_billet" class="btn btn-info">Ajouter un billet</a>
         {{ form_row(form.billets) }}
-        <a href="#" id="add_billet" class="btn btn-default">Ajouter un billet</a>
     </div>
 
     <!--Gestion des ajouts de billets-->
@@ -63,11 +68,10 @@
                 index++;
             }
 
-            // Fonction d'ajout du ien de suppression de billet
+            // Fonction suppression de billet
             function addDeleteLink($prototype) {
                 // Création du lien
                 var $deleteLink = $('<a href="#" class="btn btn-danger">Supprimer</a>');
-
                 // Ajout du lien
                 $prototype.append($deleteLink);
 
