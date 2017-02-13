@@ -15,15 +15,36 @@
         <!--Formulaire Billet-->
         <a href="#" id="add_billet" class="btn btn-info">Ajouter un billet</a>
         {{ form_row(form.billets) }}
+        <div class="alert alert-block alert-info" style="display:none">
+            <h4 id="inforeduc"></h4>
+        </div>
     </div>
 
-    <!--Gestion des ajouts de billets-->
     <script src="{{ asset('bundles/mdlbilletterie/js/jquery.js') }}"></script>
     <script type="text/javascript">
         $(document).ready(function() {
             // Récupération du « data-prototype ».
-            var $container = $('div#mdl_billetteriebundle_commande_billets');
+            var $container = $('#mdl_billetteriebundle_commande_billets');
 
+            //------------------------
+            //--Gestion des messages--
+            //------------------------
+            //---Message erreur heure de visite--
+
+            //---Message information tarif réduit--
+            $('.reduction').change(function()
+            {
+                if (('.reduction').checked)
+                {
+                    $('#inforeduc').text('Attention, un justificatif vou sera demandé à l\'entrée du musée');
+                    $('.alert-info').addClass('has-info').show("slow").delay(4000).hide("slow");
+                }
+            });
+            //---Message information +1000 billets--
+
+            //---------------------------------
+            //--Gestion des ajouts de billets--
+            //---------------------------------
             // Définition du compteur unique pour nommer les champs ajouté dynamiquement
             var index = $container.find(':input').length;
 
@@ -39,6 +60,7 @@
             if (index == 0) {
                 addBillet($container);
             } else {
+
                 // Ajout du lien de suppression sur les billet existants
                 $container.children('div').each(function() {
                     addDeleteLink($(this));
@@ -58,8 +80,11 @@
                 // Création de l'objet JQ pour le template
                 var $prototype = $(template);
 
-                // Lien de suppression du billet
-                addDeleteLink($prototype);
+                // Lien de suppression du billet (sauf billet 1)
+                if (index != 0)
+                {
+                    addDeleteLink($prototype);
+                };
 
                 // Ajout du nouveau prototype
                 $container.append($prototype);

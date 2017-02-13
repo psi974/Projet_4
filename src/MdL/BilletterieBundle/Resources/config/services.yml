@@ -1,4 +1,8 @@
+# src/MdL/BilletterieBundle/Resources/config/services.yml
+
 services:
-#    md_l_billetterie.example:
-#        class: MdL\BilletterieBundle\Example
-#        arguments: ["@service_id", "plain_value", "%parameter%"]
+    mdl_billetterie.calculprix:
+        class: MdL\BilletterieBundle\CalculPrix\MdLCalculPrix
+
+    mdl_billetterie.refCommande:
+            class: MdL\BilletterieBundle\RefCommande\MdLRefCommande
