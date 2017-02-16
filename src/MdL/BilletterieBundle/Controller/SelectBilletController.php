@@ -17,9 +17,7 @@ class SelectBilletController extends Controller
         $commande = new Commande();
         $form = $this->get('form.factory')->create(CommandeType::class, $commande);
 
-        $form->handleRequest($request);
-
-        if ($request->isMethod('POST'))
+        if ($request->isMethod('POST') && $form->handleRequest($request)->isValid())
         {
             // Récupération des données contenues dans les billets
             $billets = $commande->getBillets();
@@ -36,16 +34,20 @@ class SelectBilletController extends Controller
 
 
             // Pour test
-            /*$dateResa = $_POST['mdl_billetteriebundle_commande']['dtVisite'];
-            $commande->setDtVisite($dateResa);*/
-            var_dump($commande->getDtVisite());
-
-            var_dump($commande);
-            var_dump($form->get("billets")->getData());
-            var_dump($commande->getBillets());
-            die();
+            //$dtvisite = $_POST['mdl_billetteriebundle_commande']['dtVisite'];
+            //var_dump($_POST['mdl_billetteriebundle_commande']['dtVisite']);
+            //$newdtvisite = \DateTime::createFromFormat('d M Y - H:i' , $dtvisite);
+            //var_dump($_POST['mdl_billetteriebundle_commande']);
+            //var_dump($newdtvisite);
+            //$commande->setDtVisite($newdtvisite);
+            //var_dump($commande);
+            //var_dump($commande->getBillets());
 
             $em = $this->getDoctrine()->getManager();
+            // Lien Billets Commande
+            foreach($commande->getBillets() as $billet){
+                $billet->setCommande($commande);
+            }
             $em->persist($commande);
             $em->flush();
 

@@ -3,7 +3,7 @@
 
 {% block mdlbilletterie_body %}
     <!--Entete de la page-->
-    <div class="jumbotron">
+    <div class="jumbotron" id="entete">
         <h1 class="text-center">Billetterie du musée du Louvre</h1>
     </div>
 
@@ -15,99 +15,14 @@
         <!--Formulaire Billet-->
         <a href="#" id="add_billet" class="btn btn-info">Ajouter un billet</a>
         {{ form_row(form.billets) }}
-        <div class="alert alert-block alert-info" style="display:none">
+        <div class="alert alert-block alert-info">
             <h4 id="inforeduc"></h4>
         </div>
     </div>
 
-    <script src="{{ asset('bundles/mdlbilletterie/js/jquery.js') }}"></script>
-    <script type="text/javascript">
-        $(document).ready(function() {
-            // Récupération du « data-prototype ».
-            var $container = $('#mdl_billetteriebundle_commande_billets');
-
-            //------------------------
-            //--Gestion des messages--
-            //------------------------
-            //---Message erreur heure de visite--
-
-            //---Message information tarif réduit--
-            $('.reduction').change(function()
-            {
-                if (('.reduction').checked)
-                {
-                    $('#inforeduc').text('Attention, un justificatif vou sera demandé à l\'entrée du musée');
-                    $('.alert-info').addClass('has-info').show("slow").delay(4000).hide("slow");
-                }
-            });
-            //---Message information +1000 billets--
-
-            //---------------------------------
-            //--Gestion des ajouts de billets--
-            //---------------------------------
-            // Définition du compteur unique pour nommer les champs ajouté dynamiquement
-            var index = $container.find(':input').length;
-
-            // Ajout nouveau champ / Clic d'ajout.
-            $('#add_billet').click(function(e) {
-                addBillet($container);
-
-                e.preventDefault();
-                return false;
-            });
-
-            // Ajout automatique du premier champs
-            if (index == 0) {
-                addBillet($container);
-            } else {
-
-                // Ajout du lien de suppression sur les billet existants
-                $container.children('div').each(function() {
-                    addDeleteLink($(this));
-                });
-            }
-
-            // Fonction d'ajout formulaire BilletType
-            function addBillet($container) {
-                // Modification du contenu « data-prototype »:
-                // label du champs => "__name__label__"
-                // numéro de champs => "__name__"
-                var template = $container.attr('data-prototype')
-                        .replace(/__name__label__/g, 'Billet n°' + (index+1))
-                        .replace(/__name__/g,        index)
-                    ;
-
-                // Création de l'objet JQ pour le template
-                var $prototype = $(template);
-
-                // Lien de suppression du billet (sauf billet 1)
-                if (index != 0)
-                {
-                    addDeleteLink($prototype);
-                };
-
-                // Ajout du nouveau prototype
-                $container.append($prototype);
-
-                // Incrémentation du compteur d'ajout
-                index++;
-            }
-
-            // Fonction suppression de billet
-            function addDeleteLink($prototype) {
-                // Création du lien
-                var $deleteLink = $('<a href="#" class="btn btn-danger">Supprimer</a>');
-                // Ajout du lien
-                $prototype.append($deleteLink);
-
-                // Ajout du listener sur le clic du lien pour supprimer la catégorie
-                $deleteLink.click(function(e) {
-                    $prototype.remove();
-                    e.preventDefault();
-                    return false;
-                });
-            }
-        });
-    </script>
+    {% block javascripts %}
+        {{ parent() }}
+    {% endblock %}
+    <script src="{{ asset('bundles/mdlbilletterie/js/SelectBillet.js') }}"></script>
 
 {% endblock %}
