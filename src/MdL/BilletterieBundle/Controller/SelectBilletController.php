@@ -32,11 +32,12 @@ class SelectBilletController extends Controller
             $prixtotal = $calculprix->calculPrix($billets);
             $commande->setPrixTotal($prixtotal);
 
-
             // Pour test
             //$dtvisite = $_POST['mdl_billetteriebundle_commande']['dtVisite'];
+            //$nwdatevisite = \DateTime::createFromFormat('d-F-Y', $dtvisite);
             //var_dump($_POST['mdl_billetteriebundle_commande']['dtVisite']);
-            //$newdtvisite = \DateTime::createFromFormat('d M Y - H:i' , $dtvisite);
+            //var_dump($nwdatevisite);
+            //die;
             //var_dump($_POST['mdl_billetteriebundle_commande']);
             //var_dump($newdtvisite);
             //$commande->setDtVisite($newdtvisite);
@@ -51,7 +52,8 @@ class SelectBilletController extends Controller
             $em->persist($commande);
             $em->flush();
 
-            $request->getSession()->getFlashBag()->add('notice', 'Commande bien enregistrée.');
+            //$this->addFlash('notice', 'Commande bien enregistrée.');
+            $request->getSession()->getFlashBag()->add('success', 'Votre commande a été enregistrée');
             return $this->redirectToRoute('mdl_billetterie_view');
         }
 

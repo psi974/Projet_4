@@ -1,20 +1,27 @@
 $(document).ready(function() {
-
     // Date picker
     var date = new Date();
-    date.setDate(date.getDate());
+    var year = date.getFullYear();
+    var yearN = year+1;
+    var mois = date.getMonth();
+    var jour = date.getDate();
+    var datedebfr = jour+'-'+(mois+1)+'-'+year;
 
     $('.js-datepicker').datepicker({
         format: "dd/mm/yyyy",
         autoclose: true,
         language: 'fr',
         pickerPosition: "bottom-left",
-        startDate: date,
-        endDate: '2017-12-31',
-        daysOfWeekDisabled: [2,6],
+        startDate: datedebfr,
+        endDate: '31-12-'+yearN,
+        daysOfWeekDisabled: "0,2",
         datesDisabled: [
-            new Date(2017, 12 - 1, 25),
-            new Date(2017, 5 - 1, 2)
+            '01/05/'+year,
+            '01/11/'+year,
+            '25/12/'+year,
+            '01/05/'+yearN,
+            '01/11/'+yearN,
+            '25/12/'+yearN,
         ]
     });
 });
