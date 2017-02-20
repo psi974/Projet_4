@@ -3,3 +3,8 @@ mdl_billetterie_view:
     path:    /
     defaults:
         _controller: MdLBilletterieBundle:SelectBillet:index
+
+count_billet:
+    path:    /count/billet
+    defaults: { _controller: MdLBilletterieBundle:SelectBillet:countBillet}
+    methods: [post]

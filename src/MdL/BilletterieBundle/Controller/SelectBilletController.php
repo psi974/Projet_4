@@ -7,6 +7,7 @@ namespace MdL\BilletterieBundle\Controller;
 use MdL\BilletterieBundle\Entity\Commande;
 use MdL\BilletterieBundle\Form\CommandeType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 class SelectBilletController extends Controller
@@ -61,5 +62,17 @@ class SelectBilletController extends Controller
         return $this->render('MdLBilletterieBundle:SelectBillet:index.html.twig', array(
             'form' => $form->createView()
         ));
+    }
+
+    public function countBilletAction(Request $request)
+    {
+        if ($request->isXMLHttpRequest())
+        {
+            $dtvte=$request->get('commande_dtVisite');
+            $conn=$this->get('database_connection');
+            $query="SELECT COUNT * from billets INNER JOIN commande where commande.dtVisite = " . $dtvte;
+            $rows=$conn->fetchAll($query);
+            return new JsonResponse(array('data'=>json_encode($rows)));
+        }
     }
 }
