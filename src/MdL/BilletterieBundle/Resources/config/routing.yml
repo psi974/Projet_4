@@ -4,7 +4,9 @@ mdl_billetterie_view:
     defaults:
         _controller: MdLBilletterieBundle:SelectBillet:index
 
-count_billet:
-    path:    /count/billet
-    defaults: { _controller: MdLBilletterieBundle:SelectBillet:countBillet}
-    methods: [post]
+mdl_billetterie_cmd:
+    path:    /commande/{id}
+    defaults:
+        _controller: MdLBilletterieBundle:SelectBillet:commande
+    requirements:
+            id: \d+

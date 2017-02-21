@@ -7,13 +7,13 @@ namespace MdL\BilletterieBundle\Controller;
 use MdL\BilletterieBundle\Entity\Commande;
 use MdL\BilletterieBundle\Form\CommandeType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 class SelectBilletController extends Controller
 {
     public function indexAction(Request $request)
     {
+
         // Formulaire
         $commande = new Commande();
         $form = $this->get('form.factory')->create(CommandeType::class, $commande);
@@ -22,6 +22,24 @@ class SelectBilletController extends Controller
         {
             // Récupération des données contenues dans les billets
             $billets = $commande->getBillets();
+
+            // Control Nombre de billets par jour
+            $dtvisite = $commande->getDtVisite();
+            $nbBilletDB = $this->getDoctrine()->getManager()->getRepository('MdLBilletterieBundle:Billet')->countBydtVisite($dtvisite);
+            $ctrlnbbillet = $this->container->get('mdl_billetterie.ctrlnbbillet');
+            $billetrest = $ctrlnbbillet->ctrlnbbillet($nbBilletDB, $billets);
+
+            if ($billetrest == 'FULL')
+            {
+                // Message d'erreur - Musée complet pour ce jour
+                $request->getSession()->getFlashBag()->add('error', 'Désolé, le musée est complet à cette date');
+                return $this->redirectToRoute('mdl_billetterie_view');
+            }elseif ($billetrest !== 'OK')
+            {
+                // Message d'erreur - Reste pas assez de billet pour la commande
+                $request->getSession()->getFlashBag()->add('error', 'Désolé, il ne reste que '.$billetrest.' billet(s) à cette date');
+                return $this->redirectToRoute('mdl_billetterie_view');
+            }
 
             // Récupération du service mdl_billetterie.refcommande -> Détermination d'une référence de commande unique
             $refcommande = $this->container->get('mdl_billetterie.refcommande');
@@ -53,9 +71,9 @@ class SelectBilletController extends Controller
             $em->persist($commande);
             $em->flush();
 
-            //$this->addFlash('notice', 'Commande bien enregistrée.');
+            // Message de confirmation de commande enregistrée
             $request->getSession()->getFlashBag()->add('success', 'Votre commande a été enregistrée');
-            return $this->redirectToRoute('mdl_billetterie_view');
+            return $this->redirectToRoute('mdl_billetterie_cmd',array('id' => $commande->getId()));
         }
 
         // Formulaire invalide
@@ -64,15 +82,23 @@ class SelectBilletController extends Controller
         ));
     }
 
-    public function countBilletAction(Request $request)
+    public function commandeAction($id)
     {
-        if ($request->isXMLHttpRequest())
-        {
-            $dtvte=$request->get('commande_dtVisite');
-            $conn=$this->get('database_connection');
-            $query="SELECT COUNT * from billets INNER JOIN commande where commande.dtVisite = " . $dtvte;
-            $rows=$conn->fetchAll($query);
-            return new JsonResponse(array('data'=>json_encode($rows)));
+        // Récuération de la commande en cours
+        $em = $this->getDoctrine()->getManager();
+        $commande = $em->getRepository('MdLBilletterieBundle:Commande')->find($id);
+
+        if (null === $commande) {
+            throw new NotFoundHttpException("Cette commande n'existe plus");
         }
+
+        // Récupération des billets correspondants à la commande
+        $listBillets = $em->getRepository('MdLBilletterieBundle:Billet')->findBy(array('commande' => $commande));
+
+        // Le render ne change pas, on passait avant un tableau, maintenant un objet
+        return $this->render('MdLBilletterieBundle:CmdBillet:index.html.twig', array(
+            'commande' => $commande,
+            'listBillets' => $listBillets
+        ));
     }
 }

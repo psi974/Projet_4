@@ -4,5 +4,8 @@ services:
     mdl_billetterie.calculprix:
         class: MdL\BilletterieBundle\CalculPrix\MdLCalculPrix
 
-    mdl_billetterie.refCommande:
+    mdl_billetterie.refcommande:
             class: MdL\BilletterieBundle\RefCommande\MdLRefCommande
+
+    mdl_billetterie.ctrlnbbillet:
+            class: MdL\BilletterieBundle\CtrlNbBillet\MdLCtrlNbBillet
