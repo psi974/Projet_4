@@ -25,15 +25,18 @@ class SelectBilletController extends Controller
 
             // Control Nombre de billets par jour
             $dtvisite = $commande->getDtVisite();
+            // Count nombre de billet en DB pour la date de visite sélectionnée
             $nbBilletDB = $this->getDoctrine()->getManager()->getRepository('MdLBilletterieBundle:Billet')->countBydtVisite($dtvisite);
+            // Service de CTRL du nombre maximum de billet par jour
             $ctrlnbbillet = $this->container->get('mdl_billetterie.ctrlnbbillet');
             $billetrest = $ctrlnbbillet->ctrlnbbillet($nbBilletDB, $billets);
-
+            // Maximum déjà atteind en DB
             if ($billetrest == 'FULL')
             {
                 // Message d'erreur - Musée complet pour ce jour
                 $request->getSession()->getFlashBag()->add('error', 'Désolé, le musée est complet à cette date');
                 return $this->redirectToRoute('mdl_billetterie_view');
+            // Nb billet en DB + Nb billet commandé > maximum (Retour =>integer nombre de billet restant disponible)
             }elseif ($billetrest !== 'OK')
             {
                 // Message d'erreur - Reste pas assez de billet pour la commande
@@ -51,23 +54,12 @@ class SelectBilletController extends Controller
             $prixtotal = $calculprix->calculPrix($billets);
             $commande->setPrixTotal($prixtotal);
 
-            // Pour test
-            //$dtvisite = $_POST['mdl_billetteriebundle_commande']['dtVisite'];
-            //$nwdatevisite = \DateTime::createFromFormat('d-F-Y', $dtvisite);
-            //var_dump($_POST['mdl_billetteriebundle_commande']['dtVisite']);
-            //var_dump($nwdatevisite);
-            //die;
-            //var_dump($_POST['mdl_billetteriebundle_commande']);
-            //var_dump($newdtvisite);
-            //$commande->setDtVisite($newdtvisite);
-            //var_dump($commande);
-            //var_dump($commande->getBillets());
-
             $em = $this->getDoctrine()->getManager();
             // Lien Billets Commande
             foreach($commande->getBillets() as $billet){
                 $billet->setCommande($commande);
             }
+            // Enregistrement BDD
             $em->persist($commande);
             $em->flush();
 
