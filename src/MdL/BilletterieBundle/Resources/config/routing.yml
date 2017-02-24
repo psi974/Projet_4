@@ -10,3 +10,10 @@ mdl_billetterie_cmd:
         _controller: MdLBilletterieBundle:SelectBillet:commande
     requirements:
             id: \d+
+
+mdl_billetterie_paiement:
+    path:    /paiement/{id}
+    defaults:
+        _controller: MdLBilletterieBundle:SelectBillet:paiement
+    requirements:
+            id: \d+

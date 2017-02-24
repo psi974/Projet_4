@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class SelectBilletController extends Controller
 {
+    // Formulaire de sélection des billets et création de la commande
     public function indexAction(Request $request)
     {
 
@@ -63,8 +64,7 @@ class SelectBilletController extends Controller
             $em->persist($commande);
             $em->flush();
 
-            // Message de confirmation de commande enregistrée
-            $request->getSession()->getFlashBag()->add('success', 'Votre commande a été enregistrée');
+            // Sélection valide -> Redirection vers le récapitulatif de la commande pour paiement
             return $this->redirectToRoute('mdl_billetterie_cmd',array('id' => $commande->getId()));
         }
 
@@ -74,9 +74,10 @@ class SelectBilletController extends Controller
         ));
     }
 
+    // Récapitulatif de la commande
     public function commandeAction($id)
     {
-        // Récuération de la commande en cours
+        // Récupération de la commande en cours
         $em = $this->getDoctrine()->getManager();
         $commande = $em->getRepository('MdLBilletterieBundle:Commande')->find($id);
 
@@ -87,10 +88,56 @@ class SelectBilletController extends Controller
         // Récupération des billets correspondants à la commande
         $listBillets = $em->getRepository('MdLBilletterieBundle:Billet')->findBy(array('commande' => $commande));
 
-        // Le render ne change pas, on passait avant un tableau, maintenant un objet
+        // Transfert Objets commande et billets vers la view "récapitulative de la commande"
         return $this->render('MdLBilletterieBundle:CmdBillet:index.html.twig', array(
             'commande' => $commande,
             'listBillets' => $listBillets
         ));
+    }
+
+    // Paiement de la commande
+    public function paiementAction($id)
+    {
+        // Récupération de la commande en cours
+        $em = $this->getDoctrine()->getManager();
+        $commande = $em->getRepository('MdLBilletterieBundle:Commande')->find($id);
+
+        if (null === $commande) {
+            throw new NotFoundHttpException("Cette commande n'existe plus");
+        }
+
+        // Récupération des billets correspondants à la commande
+        $listBillets = $em->getRepository('MdLBilletterieBundle:Billet')->findBy(array('commande' => $commande));
+
+        \Stripe\Stripe::setApiKey("sk_test_epZLkY6HtvmbJVJtZC7ciAoc");
+
+        $token = $_POST['stripeToken'];
+        $emailClient = $_POST['stripeEmail'];
+        $prix = (($commande->getPrixTotal())*100);
+
+        // Enregistrement du paiement
+        try
+        {
+            $charge = \Stripe\Charge::create(array(
+                "amount" => $prix,
+                "currency" => "eur",
+                "source" => $token,
+                "description" => "Paiement musée du Louvre"
+            ));
+
+            // Enregistrement dans la DB de l'email client pour validation commande
+            $commande->setEmailClient($emailClient);
+            $em->flush();
+
+            // Message de confirmation de commande
+            $this->addFlash('success', 'Votre commande a été enregistrée');
+            return $this->redirectToRoute('mdl_billetterie_view');
+        }
+        catch(\Stripe\Error\Card $e)
+        {
+            // Message d'erreur paiement non-effectué
+            $this->addFlash('error', 'Erreur - commande annulée');
+            return $this->redirectToRoute('mdl_billetterie_view');
+        }
     }
 }
