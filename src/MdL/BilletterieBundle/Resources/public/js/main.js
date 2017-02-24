@@ -6,5 +6,5 @@ $(document).ready(function() {
     $('#commande-success').delay(6000).hide("slow");
 
     //---Message jour complet---
-    $('#jour-full').delay(6000).hide("slow");
+    $('#commande-error').delay(6000).hide("slow");
 });

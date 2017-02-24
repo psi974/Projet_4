@@ -11,7 +11,9 @@ use Symfony\Component\HttpFoundation\Request;
 
 class SelectBilletController extends Controller
 {
+    //----------------------------------------------------------------
     // Formulaire de sélection des billets et création de la commande
+    //----------------------------------------------------------------
     public function indexAction(Request $request)
     {
 
@@ -53,6 +55,11 @@ class SelectBilletController extends Controller
             // Récupération du service mdl_billetterie.calculprix -> Calcul du prix total en fonction de l'age des visiteurs
             $calculprix = $this->container->get('mdl_billetterie.calculprix');
             $prixtotal = $calculprix->calculPrix($billets);
+            // Message total de la commande est nul
+            if ($prixtotal == 0) {
+                $this->addFlash('error', 'Désolé, nous ne pouvons donner suite à votre commande, contactez-nous.');
+                return $this->redirectToRoute('mdl_billetterie_view');
+            }
             $commande->setPrixTotal($prixtotal);
 
             $em = $this->getDoctrine()->getManager();
@@ -73,8 +80,9 @@ class SelectBilletController extends Controller
             'form' => $form->createView()
         ));
     }
-
+    //------------------------------
     // Récapitulatif de la commande
+    //------------------------------
     public function commandeAction($id)
     {
         // Récupération de la commande en cours
@@ -94,8 +102,9 @@ class SelectBilletController extends Controller
             'listBillets' => $listBillets
         ));
     }
-
+    //-------------------------
     // Paiement de la commande
+    //-------------------------
     public function paiementAction($id)
     {
         // Récupération de la commande en cours
@@ -124,14 +133,43 @@ class SelectBilletController extends Controller
                 "source" => $token,
                 "description" => "Paiement musée du Louvre"
             ));
+            // Paiement enregistré
+            if ($charge) {
+                // Enregistrement dans la DB de l'email client pour validation commande
+                $commande->setEmailClient($emailClient);
+                $em->flush();
 
-            // Enregistrement dans la DB de l'email client pour validation commande
-            $commande->setEmailClient($emailClient);
-            $em->flush();
-
-            // Message de confirmation de commande
-            $this->addFlash('success', 'Votre commande a été enregistrée');
-            return $this->redirectToRoute('mdl_billetterie_view');
+                // Envoi du mail de confirmation avec les billets commandés
+                $message = \Swift_Message::newInstance()
+                    ->setSubject("Vos billets d'entrée au musée de Louvre")
+                    ->setFrom('MuseeDuLouvre@gmail.com')
+                    ->setTo($emailClient)
+                    ->setBody(
+                        $this->renderView(
+                        // app/Resources/views/Emails/billets.html.twig
+                            'Emails/billets.html.twig',
+                            array(
+                                'commande' => $commande,
+                                'listBillets' => $listBillets)
+                        ),
+                        'text/html'
+                    );
+                $envoiMail = $this->get('mailer')->send($message);
+                // CTRL envoi du mail
+                if ($envoiMail) {
+                    // Message de confirmation de commande
+                    $this->addFlash('success', 'Commande validée, vos billets vous ont été envoyés par mail');
+                    return $this->redirectToRoute('mdl_billetterie_view');
+                } else {
+                    // Message d'erreur problème d'envoi
+                    $this->addFlash('error', 'L\'envoi de vos billets n\'a pas abouti, conservez la référence votre commande et contactez-nous');
+                    // Transfert Objets commande et billets vers la view "récapitulative de la commande"
+                    return $this->render('MdLBilletterieBundle:CmdBillet:index.html.twig', array(
+                        'commande' => $commande,
+                        'listBillets' => $listBillets
+                    ));
+                }
+            }
         }
         catch(\Stripe\Error\Card $e)
         {
