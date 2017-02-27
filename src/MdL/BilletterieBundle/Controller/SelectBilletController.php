@@ -142,7 +142,7 @@ class SelectBilletController extends Controller
                 // Envoi du mail de confirmation avec les billets commandés
                 $message = \Swift_Message::newInstance()
                     ->setSubject("Vos billets d'entrée au musée de Louvre")
-                    ->setFrom('MuseeDuLouvre@gmail.com')
+                    ->setFrom(array('MuseeDuLouvre@gmail.com' => 'Musée du Louvre'))
                     ->setTo($emailClient)
                     ->setBody(
                         $this->renderView(
