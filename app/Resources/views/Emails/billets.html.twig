@@ -1,0 +1,60 @@
+{# app/Resources/views/Emails/billets.html.twig #}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Billetterie du musée du Louvre</title>
+        <meta name="description" content="Billetterie musée du Louvre">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+        <link href='http://fonts.googleapis.com/css?family=Bitter' rel='stylesheet' type='text/css'>
+    </head>
+
+    <body>
+        <div class="container">
+            <div class="jumbotron" style="background-image: linear-gradient(#b4c2db, #7d8da7 85%, #174f6e); border: 1px solid black;">
+                <img class="img-rounded img-responsive" style="margin:0 auto;" src="{{ absolute_url(asset('bundles/mdlbilletterie/images/logo_louvre.jpg')) }}" alt="Musée du Louvre">
+                <h1 class="text-center" style="font-size: 3em; color: #505B6B">Musée du Louvre</h1>
+            </div>
+
+            <!--Récapitulatif de la commande-->
+            <div class="well">
+                <h2 class="text-center" style="border: 1px solid black;">Récapitulatif de votre commande</h2>
+                <hr>
+                <p>Référence de votre commande : {{ commande.refCommande }}</p>
+                <span>Date de votre visite : {{ commande.dtVisite|date('d-m-Y') }}</span>
+                {% if commande.billetJour %}
+                    <span> - Billet journée : Oui</span>
+                {% else %}
+                    <span> - Billet journée : Non (Vos billets sont valables à partir de 14h00)</span>
+                {% endif %}
+                <hr>
+                {% if listBillets|length > 0 %}
+                    <table class="table">
+                        <tr>
+                            <th>Nom</th>
+                            <th>Prénom</th>
+                            <th>Tarif réduit</th>
+                        </tr>
+                        {% for billet in listBillets %}
+                            <tr>
+                                <td>{{billet.nom}}</td>
+                                <td>{{billet.prenom}}</td>
+                                {% if billet.tarifReduit %}
+                                    <td>Oui</td>
+                                {% else %}
+                                    <td>Non</td>
+                                {% endif %}
+                            </tr>
+                        {% endfor %}
+                    </table>
+                {% endif %}
+                <hr>
+                <h3 class="text-center">Prix total payé: {{ commande.prixTotal|number_format(2, ',') }} euros</h3>
+            </div>
+        </div>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    </body>
+</html>

@@ -1,0 +1,109 @@
+{# src/MdL/BilletterieBundle/Resources/views/layout.html.twig #}
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Billetterie du musée du Louvre</title>
+		<meta name="description" content="Billetterie musée du Louvre">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+		<link href='http://fonts.googleapis.com/css?family=Bitter' rel='stylesheet' type='text/css'>
+		<link rel="stylesheet" href="{{ asset('bundles/mdlbilletterie/css/main.css') }}" type="text/css" />
+		<link rel="stylesheet" href="{{ asset('bundles/mdlbilletterie/css/bootstrap-datepicker.css') }}">
+	</head>
+
+	<body>
+		<div class="container">
+			<header id="header_billetterie">
+			<!--Menu navigation-->
+				<nav class="navbar navbar-inverse" role="navigation">
+					<div class="hidden-xs hidden-sm hidden-md">
+						<div class="col-lg-1 hidden-md">
+							<img src="{{ asset('bundles/mdlbilletterie/images/logo_louvre.jpg') }}" class="img-responsive" id="logoLouvre" alt="Musée du Louvre" width="50" height="50">
+						</div>
+					</div>
+					<div class="col-sm-offset-2">
+						<div class="navbar-header">
+							<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+								<span class="icon-bar"></span>
+								<span class="icon-bar"></span>
+								<span class="icon-bar"></span>
+								<span class="icon-bar"></span>
+							</button>
+							<div class="hidden-xs">
+								<a class="navbar-brand" href="{{ path('mdl_billetterie_view') }}">Musée du Louvre</a>
+							</div>
+							<div class="hidden-md hidden-lg hidden-sm">
+								<div class="col-xs-10">
+									<a class="navbar-brand" href="{{ path('mdl_billetterie_view') }}" style="font-size: 1.3em;">Musée du Louvre</a>
+								</div>
+							</div>
+						</div>
+						<div class="collapse navbar-collapse">
+							<ul class="nav navbar-nav">
+								<li><a href="{{ path('mdl_billetterie_view') }}">Accueil</a></li>
+								<li><a href="{{ path('mdl_billetterie_view') }}">Présentation du musée</a></li>
+								<li class="active"><a href="{{ path('mdl_billetterie_view') }}">Billetterie</a></li>
+								<li><a href="{{ path('mdl_billetterie_view') }}">Contactez-nous</a></li>
+							</ul>
+						</div>
+					</div>
+				</nav>
+			</header>
+
+            {% if app.session.flashBag.has('success') %}
+				<div class="alert alert-success" id="commande-success">
+                    {% for msg in app.session.flashBag.get('success') %}
+                        {{ msg }}
+                    {% endfor %}
+				</div>
+            {% endif %}
+            {% if app.session.flashBag.has('error') %}
+				<div class="alert alert-danger" id="commande-error">
+                    {% for msg in app.session.flashBag.get('error') %}
+                        {{ msg }}
+                    {% endfor %}
+				</div>
+            {% endif %}
+
+			<!--Corps de la page-->
+			{% block mdlbilletterie_body %}
+			{% endblock %}
+
+			<div class="jumbotron" id="piedpage">
+				<footer class="text-center">
+				<!-- Pied de page-->
+					<!--Affichage pour SM / MD / LG -->
+					<div class="text-center hidden-xs">
+						<a class="btn btn-primary btn-md" href="#"><i class="fa fa-twitter fa-2x"></i></a>
+						<a class="btn btn-primary btn-md" href="#"><i class="fa fa-facebook fa-2x"></i></a>
+						<a class="btn btn-primary btn-md" href="#"><i class="fa fa-google-plus fa-2x"></i></a>
+						<a class="btn btn-primary btn-md" href="#"><i class="fa fa-flickr fa-2x"></i></a>
+						<a class="btn btn-primary btn-md" href="#"><i class="fa fa-spotify fa-2x"></i></a>
+					</div>
+					<!--Affichage bouton pour XS -->
+					<div class="text-center hidden-md hidden-lg hidden-sm">
+						<a class="btn btn-primary btn-sm" href="#"><i class="fa fa-twitter"></i></a>
+						<a class="btn btn-primary btn-sm" href="#"><i class="fa fa-facebook"></i></a>
+						<a class="btn btn-primary btn-sm" href="#"><i class="fa fa-google-plus"></i></a>
+						<a class="btn btn-primary btn-sm" href="#"><i class="fa fa-flickr"></i></a>
+						<a class="btn btn-primary btn-sm" href="#"><i class="fa fa-spotify"></i></a>
+					</div>
+					<p id="copyright">Musée du Louvre © {{ 'now'|date('Y') }}.</p>
+				</footer>
+			</div>
+		</div>
+
+        {% block javascripts %}
+			<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+			<script src="{{ asset('bundles/mdlbilletterie/js/bootstrap-datepicker.js') }}"></script>
+			<script src="{{ asset('bundles/mdlbilletterie/js/bootstrap-datepicker.fr.js') }}"></script>
+			<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+			<script src="{{ asset('bundles/mdlbilletterie/js/main.js') }}"></script>
+		{% endblock %}
+
+	</body>
+</html>

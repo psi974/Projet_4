@@ -1,0 +1,109 @@
+/* Styles de base */
+body {
+    font-family: 'Bitter', serif;
+    background-color: rgb(51,17,7);
+}
+/* Barre de navigation */
+.navbar {
+    border-radius: 0;
+}
+#logoLouvre {
+    margin:0.5em;
+}
+/* Jumbotron */
+.jumbotron {
+    background-color: rgba(34, 34, 34, 0.9);
+    margin-bottom: 0;
+}
+/* Formulaire */
+button#mdl_billetteriebundle_commande_Commander, a#add_billet, .btn-danger{
+    color: rgb(222, 222, 222);
+}
+button#mdl_billetteriebundle_commande_Commander {
+    background-image: linear-gradient(#71b5db, #0072b5 85%, #174f6e);
+}
+a#add_billet {
+    background-image: linear-gradient(#e3ae1e, #ae8332 85%, #a43617);
+}
+.btn-danger{
+    background-image: linear-gradient(#ef4c47, #ae190e 85%, #a40709);
+}
+button#mdl_billetteriebundle_commande_Commander:hover, a#add_billet:hover, .btn-danger:hover {
+    color: white;
+    font-weight: bolder;
+}
+/* Entête */
+.jumbotron h1{
+    color: white;
+    font-size: 2em;
+}
+#entete {
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+}
+/* Billet */
+h2 {
+    font-size: 1.5em;
+}
+.well {
+    color: rgb(93, 93, 93);
+    border-radius: 0;
+    margin-bottom: 0;
+}
+#mdl_billetteriebundle_commande_billets {
+    padding: 0.5em;
+    border: 1px solid rgba(93, 93, 93, 0.5);
+    border-radius: 6px;
+}
+/* Récapitulatif billet */
+#recap {
+    border: 1px solid rgb(182, 182, 182);
+    padding: 0.5em;
+}
+#total {
+    font-weight: bolder;
+}
+/* Pied de page */
+#piedpage {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    margin-bottom: 1em;
+ }
+#copyright {
+    padding-bottom: 0;
+    margin-bottom: 0;
+}
+footer{
+    margin: 0;
+    padding: 10px;
+    color: white;
+    font-size: 1em;
+}
+/* Message*/
+#commande-success {
+    text-align: center;
+    font-size: 1.5em;
+    background-image: linear-gradient(#71b5db, #0072b5 85%, #174f6e);
+    color: white;
+}
+#commande-error {
+    text-align: center;
+    font-size: 1.5em;
+    background-image: linear-gradient(#ef4c47, #ae190e 85%, #a40709);
+    color: white;
+}
+.has-danger {
+    background-image: linear-gradient(#ef4c47, #ae190e 85%, #a40709);
+    color: white;
+}
+/* Paiement */
+span.btn.btn-info {
+    color: rgb(222, 222, 222);
+    background-image: linear-gradient(#71b5db, #0072b5 85%, #174f6e);
+    font-family: 'Bitter', serif;
+    font-weight: 100;
+}
+.stripe-button-el:hover span {
+    color: white;
+    font-weight: bolder;
+}

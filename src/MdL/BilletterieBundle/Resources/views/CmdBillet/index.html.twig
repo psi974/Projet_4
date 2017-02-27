@@ -1,0 +1,64 @@
+{# src/MdL/BilletterieBundle/Resources/views/CmdBillet/index.html.twig #}
+{% extends "MdLBilletterieBundle::layout.html.twig" %}
+
+{% block mdlbilletterie_body %}
+    <!--Entete de la page-->
+    <div class="jumbotron" id="entete">
+        <h1 class="text-center">Billetterie du musée du Louvre</h1>
+    </div>
+
+    <!--Récapitulatif de la commande-->
+    <div class="well">
+        <h2 class="text-center" id="recap">Récapitulatif de votre commande</h2>
+        <hr>
+        <p>Référence de votre commande : {{ commande.refCommande }}</p>
+        <span>Date de votre visite : {{ commande.dtVisite|date('d-m-Y') }}</span>
+        {% if commande.billetJour %}
+            <span> - Billet journée : Oui</span>
+        {% else %}
+            <span> - Billet journée : Non (Vos billets sont valables à partir de 14h00)</span>
+        {% endif %}
+        <hr>
+        <div class="center align">
+            {% if listBillets|length > 0 %}
+                <table class="table-responsive table">
+                    <tr>
+                        <th>Nom</th>
+                        <th>Prénom</th>
+                        <th>Tarif réduit</th>
+                    </tr>
+                    {% for billet in listBillets %}
+                        <tr>
+                            <td>{{billet.nom}}</td>
+                            <td>{{billet.prenom}}</td>
+                            {% if billet.tarifReduit %}
+                                <td>Oui</td>
+                            {% else %}
+                                <td>Non</td>
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+                </table>
+            {% endif %}
+        </div>
+        <hr>
+        <p id="total">Prix Total : {{ commande.prixTotal|number_format(2, ',') }} euros</p>
+        <!--Module de paiement-->
+        <form action="{{ path('mdl_billetterie_paiement', {'id' : commande.id}) }}" method="POST">
+            <script
+                    src="https://checkout.stripe.com/v2/checkout.js" class="stripe-button"
+                    data-key="pk_test_6eENrygsME4gYTIl6KPQLV7k"
+                    data-amount="{{ commande.prixTotal*100 }}"
+                    data-name="Musée du Louvre"
+                    data-image="{{ asset('bundles/mdlbilletterie/images/logo_louvre.jpg') }}"
+                    data-description="Paiement"
+                    data-locale="auto"
+                    data-currency="eur">
+            </script>
+        </form>
+    </div>
+    {% block javascripts %}
+        {{ parent() }}
+    {% endblock %}
+    <script src="{{ asset('bundles/mdlbilletterie/js/CmdBillet.js') }}"></script>
+{% endblock %}
