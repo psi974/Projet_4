@@ -9,3 +9,7 @@ services:
 
     mdl_billetterie.ctrlnbbillet:
             class: MdL\BilletterieBundle\CtrlNbBillet\MdLCtrlNbBillet
+            arguments: ["@doctrine.orm.entity_manager"]
+
+    mdl_billetterie.enregpmt:
+            class: MdL\BilletterieBundle\EnregPmt\MdLEnregPmt

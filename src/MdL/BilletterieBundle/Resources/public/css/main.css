@@ -96,14 +96,3 @@ footer{
     background-image: linear-gradient(#ef4c47, #ae190e 85%, #a40709);
     color: white;
 }
-/* Paiement */
-span.btn.btn-info {
-    color: rgb(222, 222, 222);
-    background-image: linear-gradient(#71b5db, #0072b5 85%, #174f6e);
-    font-family: 'Bitter', serif;
-    font-weight: 100;
-}
-.stripe-button-el:hover span {
-    color: white;
-    font-weight: bolder;
-}

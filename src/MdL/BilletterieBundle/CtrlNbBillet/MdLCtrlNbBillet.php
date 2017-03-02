@@ -1,16 +1,28 @@
 <?php
 // src/MdL/BilletterieBundle/CtrlNbBillet/MdLCtrlNbBillet.php
-// CTRL du nombre de billet restant sur la journée
+// CTRL du nombre de billet disponible pour une date de visite
 
 namespace MdL\BilletterieBundle\CtrlNbBillet;
 
+use Doctrine\ORM\EntityManagerInterface;
+
 class MdLCtrlNbBillet
 {
-    public function ctrlnbbillet($nbbilletDB, $billets)
+    // Récupération de Doctrine dans le service
+    private $em;
+    public function __construct(EntityManagerInterface $em)
     {
+        $this->em = $em;
+    }
+
+    public function ctrlNbBillet($billets, $dtvisite)
+    {
+        // Count nombre de billet en DB pour la date de visite sélectionnée
+        $nbBilletDB = $this->em->getRepository('MdLBilletterieBundle:Billet')->countBydtVisite($dtvisite);
         $nbbillet = 0;
+
         // pour test modifier le nombre de billet maximum
-        if ($nbbilletDB >= 1000)
+        if ($nbBilletDB >= 1000)
         {
             $billetrest = 'FULL';
         }else
@@ -19,7 +31,7 @@ class MdLCtrlNbBillet
                 $nbbillet++;
             }
             // pour test modifier le nombre de billet maximum
-            $billetdif = 1000 - ($nbbillet + $nbbilletDB);
+            $billetdif = 1000 - ($nbbillet + $nbBilletDB);
             if ($billetdif < 0) {
                 $billetrest = abs($billetdif + $nbbillet);
             } else {
