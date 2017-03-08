@@ -21,7 +21,7 @@ class MdLCtrlNbBillet
         $nbBilletDB = $this->em->getRepository('MdLBilletterieBundle:Billet')->countBydtVisite($dtvisite);
         $nbbillet = 0;
 
-        // pour test modifier le nombre de billet maximum
+        // Nombre maximu de billets 1000/jour.
         if ($nbBilletDB >= 1000)
         {
             $billetrest = 'FULL';
@@ -30,12 +30,18 @@ class MdLCtrlNbBillet
             foreach ($billets as $billet) {
                 $nbbillet++;
             }
-            // pour test modifier le nombre de billet maximum
-            $billetdif = 1000 - ($nbbillet + $nbBilletDB);
-            if ($billetdif < 0) {
-                $billetrest = abs($billetdif + $nbbillet);
-            } else {
-                $billetrest = 'OK';
+            if ($nbbillet >= 1000)
+            {
+                $billetrest = 'FULL';
+            }else
+            {
+                // pour test modifier le nombre de billet maximum
+                $billetdif = 1000 - ($nbbillet + $nbBilletDB);
+                if ($billetdif < 0) {
+                    $billetrest = abs($billetdif + $nbbillet);
+                } else {
+                    $billetrest = 'OK';
+                }
             }
         }
         return $billetrest;

@@ -49,6 +49,7 @@ class Billet
      * @var \DateTime
      *
      * @ORM\Column(name="dtNaissance", type="datetime")
+     * @Assert\Range(max="now", maxMessage="Date de naissance invalide.")
      */
     private $dtNaissance;
 

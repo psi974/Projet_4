@@ -27,7 +27,8 @@ class BilletType extends AbstractType
             ->add('dtNaissance',    BirthdayType::class, array(
                 'label' => 'Date de naissance',
                 'format' => 'dd MM yyyy',
-                'model_timezone' => 'Europe/Berlin'))
+                'model_timezone' => 'Europe/Berlin'
+                ))
             ->add('tarifReduit',    CheckboxType::class, array(
                 'label' => 'Tarif réduit',
                 'required' => false,

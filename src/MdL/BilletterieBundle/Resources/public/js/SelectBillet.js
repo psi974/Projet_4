@@ -39,7 +39,6 @@ $(document).ready(function() {
     //---------------------------------
     // Définition du compteur unique pour nommer les champs ajouté dynamiquement
     var index = $container.find(':input').length;
-
     // Ajout nouveau champ / Clic d'ajout.
     $('#add_billet').click(function (e) {
         addBillet($container);
@@ -66,12 +65,11 @@ $(document).ready(function() {
         var template = $container.attr('data-prototype')
             .replace(/__name__label__/g, 'Billet n°' + (index + 1))
             .replace(/__name__/g, index);
-
         // Création de l'objet JQ pour le template
         var $prototype = $(template);
 
         // Lien de suppression du billet (sauf billet 1)
-        if (index != 0) {
+        if (index > 0) {
             addDeleteLink($prototype);
         }
 

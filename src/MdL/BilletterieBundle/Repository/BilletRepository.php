@@ -10,7 +10,6 @@ class BilletRepository extends \Doctrine\ORM\EntityRepository
 {
     public function countBydtVisite($dtvisite)
     {
-        var_dump($dtvisite);
         $qb = $this
             ->createQueryBuilder('b')
             ->join('b.commande', 'c')

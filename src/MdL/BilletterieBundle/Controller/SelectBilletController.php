@@ -122,7 +122,7 @@ class SelectBilletController extends Controller
         // Récupération des données client
         $token = $_POST['stripeToken'];
         $emailClient = $_POST['stripeEmail'];
-        $prix = (($commande->getPrixTotal())*100);
+        $prix = (($commande->getPrixTotal())*100); //Prix en centimes
 
         // Service d'enregistrement du paiement STRIPE
         //---------------------------------------------
