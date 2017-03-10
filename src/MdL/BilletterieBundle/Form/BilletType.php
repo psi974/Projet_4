@@ -19,16 +19,20 @@ class BilletType extends AbstractType
     {
         $builder
             ->add('nom',            TextType::class, array(
-                'attr' => ['placeholder' => 'Nom du titulaire']))
+                'attr' => ['placeholder' => 'Nom du titulaire',
+                           'class' => 'nom']))
             ->add('prenom',         TextType::class, array(
-                'attr' =>['placeholder' => 'Prénom du titulaire']))
+                'attr' =>['placeholder' => 'Prénom du titulaire',
+                          'class' => 'prenom']))
             ->add('pays',           CountryType::class, array(
                 'preferred_choices' => array('FR')))
             ->add('dtNaissance',    BirthdayType::class, array(
                 'label' => 'Date de naissance',
-                'format' => 'dd MM yyyy',
-                'model_timezone' => 'Europe/Berlin'
-                ))
+                'widget' => 'single_text',
+                'html5' => false,
+                'format' => 'dd-MM-yyyy',
+                'attr' =>['class' => 'dtNaiss',
+                    'readonly' => 'true']))
             ->add('tarifReduit',    CheckboxType::class, array(
                 'label' => 'Tarif réduit',
                 'required' => false,

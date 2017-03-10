@@ -1,7 +1,9 @@
 $(document).ready(function() {
     // Récupération des « data-prototype ».
     var $container = $('#mdl_billetteriebundle_commande_billets');
-
+    // Compteur pour gestion du nombre d'erreur de saisie
+    var nbErrSv = 0;
+    var nbErrSaisie = 0;
     //--------------------------------------------
     //---Gestion Journée + Heure courante > 14h---
     //--------------------------------------------
@@ -67,14 +69,29 @@ $(document).ready(function() {
             .replace(/__name__/g, index);
         // Création de l'objet JQ pour le template
         var $prototype = $(template);
-
         // Lien de suppression du billet (sauf billet 1)
         if (index > 0) {
             addDeleteLink($prototype);
         }
-
         // Ajout du nouveau prototype
+        $prototype.append('<hr>');
         $container.append($prototype);
+        nbErrSv = nbErrSaisie;
+
+        //------------------------------------
+        //----DatePicker--Date de naissance---
+        //------------------------------------
+        $('.dtNaiss').datepicker({
+            format: "dd/mm/yyyy",
+            autoclose: true,
+            language: 'fr',
+            pickerPosition: "bottom-left",
+            startDate: '01/01/1902',
+            endDate: 'today'
+        });
+        // Création de l'objet JQ pour la date de naissaince.
+        var $dateNaiss = $('#mdl_billetteriebundle_commande_billets_'+ index +'_dtNaissance');
+        $dateNaiss.datepicker('setDate', '01/01/1940');
 
         // Incrémentation du compteur d'ajout
         index++;
@@ -87,10 +104,10 @@ $(document).ready(function() {
         var $deleteLink = $('<a href="#" class="btn btn-danger">Supprimer</a>');
         // Ajout du lien
         $prototype.append($deleteLink);
-
         // Ajout du listener sur le clic du lien pour supprimer le billet
         $deleteLink.click(function (e) {
             $prototype.remove();
+            nbErrSaisie = nbErrSv;
             e.preventDefault();
             return false;
         });
@@ -101,20 +118,122 @@ $(document).ready(function() {
     $($container).on('click', '.reduction', function(e) {
         // Récupération ID du checkbox concerné
         var $reducId = $("#"+$(this).attr('id'));
-        $('.alert-danger').remove();
-        var $msg = $('<div class="alert alert-block alert-danger" style="display:none"><h4 class="textMsg"></h4></div>');
+        $('.msgReduc').remove();
+        var $msg = $('<div class="alert alert-block alert-danger msgReduc" style="display:none"><h4 class="textMsg"></h4></div>');
         var check = $($reducId).prop("checked");
         if(check)
         {
             $reducId.before($msg);
             $('.textMsg').text('Attention, un justificatif vous sera demandé à l\'entrée du musée');
-            $('.alert-danger').addClass('has-danger').fadeIn(1000).delay(4000).fadeOut(2000);
+            $('.msgReduc').addClass('has-danger').fadeIn(1000).delay(4000).fadeOut(2000);
         }
     });
 
-    //----------------
-    // ---DatePicker--
-    //-----------------
+    //---------------------------------
+    //---Message CTRL zones de saisie--
+    //---------------------------------
+
+    $('.commander').attr('disabled', true);
+    $('#add_billet').attr('disabled', true);
+    // CTRL Zone de saisie du nom
+    //----------------------------
+    $($container).on('focus' , '.nom' , function(e) {
+        // Suppression du message d'erreur sur la zone (si existant)
+        var $msgNomIds = $(".msg" + $(this).attr('id'));
+        if ($msgNomIds.length) {
+            $msgNomIds.remove();
+            nbErrSaisie--;
+        }
+        // Désactivation / Activation des boutons par rapport aux erreurs de saisie
+        //-------------------------------------------------------------------------
+        if (nbErrSaisie > 0)
+        {
+            $('.commander').attr('disabled', true);
+            $('#add_billet').attr('disabled', true);
+        } else
+        {
+            $('.commander').attr('disabled', false);
+            $('#add_billet').attr('disabled', false);
+        }
+    });
+    $($container).on('blur', '.nom' , function(e) {
+        // Récupération ID du nom concerné
+        var $nomId = $("#" + $(this).attr('id'));
+        if(!$($nomId).val().match(/^[a-zA-Z àâéèêôùûçÀÂÉÈÔÙÛïÏ]{2,20}$/))
+        {
+            //Construction de la class du msg d'erreur
+            var $msgNomIdc = ("msg" + $(this).attr('id'));
+            // Construction du message d'erreur
+            var $msg = $('<div class="alert alert-block alert-danger msgNom" style="display:none"><h4 class="textMsgNom"></h4></div>');
+            $nomId.before($msg);
+            $('.textMsgNom').text('Ce nom n\'est pas valide');
+            $('.msgNom').addClass('has-danger').fadeIn(1000);
+            $('.msgNom').addClass($msgNomIdc);
+            nbErrSaisie++;
+            // Désactivation / Activation des boutons par rapport aux erreurs de saisie
+            //-------------------------------------------------------------------------
+            if (nbErrSaisie > 0)
+            {
+                $('.commander').attr('disabled', true);
+                $('#add_billet').attr('disabled', true);
+            } else
+            {
+                $('.commander').attr('disabled', false);
+                $('#add_billet').attr('disabled', false);
+            }
+        }
+    });
+
+    // CTRL Zone de saisie du prénom
+    //-------------------------------
+    $($container).on('focus' , '.prenom' , function(e) {
+        // Suppression du message d'erreur sur la zone (si existant)
+        var $msgPreNomIds = $(".msg" + $(this).attr('id'));
+        if ($msgPreNomIds.length) {
+            $msgPreNomIds.remove();
+            nbErrSaisie--;
+        }
+        // Désactivation / Activation des boutons par rapport aux erreurs de saisie
+        //-------------------------------------------------------------------------
+        if (nbErrSaisie > 0) {
+            $('.commander').attr('disabled', true);
+            $('#add_billet').attr('disabled', true);
+        } else {
+            $('.commander').attr('disabled', false);
+            $('#add_billet').attr('disabled', false);
+        }
+    });
+    $($container).on('blur', '.prenom' , function(e) {
+        // Récupération ID du prenom concerné
+        var $preNomId = $("#" + $(this).attr('id'));
+        if(!$($preNomId).val().match(/^[a-zA-Z àâéèêôùûçÀÂÉÈÔÙÛïÏ]{2,20}$/))
+        {
+            //Construction de la class du msg d'erreur
+            var $msgPreNomIdc = ("msg" + $(this).attr('id'));
+            // Construction du message d'erreur
+            var $msg = $('<div class="alert alert-block alert-danger msgPreNom" style="display:none"><h4 class="textMsgPreNom"></h4></div>');
+            $preNomId.before($msg);
+            $('.textMsgPreNom').text('Ce prénom n\'est pas valide');
+            $('.msgPreNom').addClass('has-danger').fadeIn(1000);
+            $('.msgPreNom').addClass($msgPreNomIdc);
+            nbErrSaisie++;
+            // Désactivation / Activation des boutons par rapport aux erreurs de saisie
+            //-------------------------------------------------------------------------
+            if (nbErrSaisie > 0)
+            {
+                $('.commander').attr('disabled', true);
+                $('#add_billet').attr('disabled', true);
+            } else
+            {
+                $('.commander').attr('disabled', false);
+                $('#add_billet').attr('disabled', false);
+            }
+        }
+    });
+
+    //---------------------------------
+    //----DatePicker--Date de visite---
+    //---------------------------------
     var date = new Date();
     var year = date.getFullYear();
     var yearN = year+1;
@@ -141,3 +260,4 @@ $(document).ready(function() {
     });
     $('.js-datepicker').datepicker('setDate', 'today');
 });
+

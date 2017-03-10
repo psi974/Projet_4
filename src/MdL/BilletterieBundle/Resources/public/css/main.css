@@ -94,5 +94,17 @@ footer{
 }
 .has-danger {
     background-image: linear-gradient(#ef4c47, #ae190e 85%, #a40709);
-    color: white;
+    color: rgb(227, 227, 227);
+    padding: 0.5em;
+    margin-bottom: 0;
+}
+.msgNom, .msgPreNom, .msgDtNaiss {
+    padding: 0.5em;
+    margin-bottom: 0;
+    color: rgb(227, 227, 227);
+    text-align: center;
+}
+.textMsgNom, .textMsgPreNom, .textMsgDtNaiss, .textMsg {
+    font-size: 1em;
+    margin-bottom: 0;
 }

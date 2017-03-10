@@ -25,19 +25,17 @@ class CommandeType extends AbstractType
                 'html5' => false,
                 'format' => 'dd-MM-yyyy',
                 'attr' =>['class' => 'js-datepicker',
-                          'placeholder' => 'Cliquez pour choisir votre date et heure de visite',
                           'readonly' => 'true']))
             ->add('billetJour',       CheckboxType::class, array(
                 'label' => 'Journée complète',
                 'required' => false))
             ->add('billets',        CollectionType::class, array(
-                'label' => ' ',
                 'entry_type'   => BilletType::class,
                 'allow_add'    => true,
                 'allow_delete' => true,
                 'attr' => ['class' => 'billet']))
             ->add('Commander',      SubmitType::class, array(
-                'attr' => ['class' => 'btn btn-primary']));
+                'attr' => ['class' => 'btn btn-primary commander']));
     }
     
     /**
