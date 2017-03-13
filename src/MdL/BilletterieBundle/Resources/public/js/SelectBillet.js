@@ -41,13 +41,15 @@ $(document).ready(function() {
     //---------------------------------
     // Définition du compteur unique pour nommer les champs ajouté dynamiquement
     var index = $container.find(':input').length;
-    // Ajout nouveau champ / Clic d'ajout.
-    $('#add_billet').click(function (e) {
+    // Ajout nouveau billet / Clic d'ajout.
+    var $addBillet =  $('<a href="#" id="add_billet" class="btn btn-info">Ajouter un billet</a>');
+    $addBillet.insertBefore('.commander');
+    $addBillet.click(function (e) {
         addBillet($container);
         e.preventDefault();
         return false;
     });
-
+    $('.commander').addClass('pull-right');
     // Ajout automatique du premier champs
     if (index == 0) {
         addBillet($container);

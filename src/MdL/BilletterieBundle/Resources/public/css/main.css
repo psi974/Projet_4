@@ -108,3 +108,7 @@ footer{
     font-size: 1em;
     margin-bottom: 0;
 }
+/* Sélection Date */
+.js-datepicker:hover, .dtNaiss:hover, .pays:hover {
+    cursor: pointer;
+}
