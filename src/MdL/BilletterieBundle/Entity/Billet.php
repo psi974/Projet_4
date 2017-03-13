@@ -26,6 +26,7 @@ class Billet
      * @var string
      *
      * @ORM\Column(name="nom", type="string", length=255)
+     * @Assert\Length(min=2, minMessage="Le nom doit contenir au moins {{ limit }} caractères.")
      */
     private $nom;
 
@@ -33,6 +34,7 @@ class Billet
      * @var string
      *
      * @ORM\Column(name="prenom", type="string", length=255)
+     * @Assert\Length(min=2, minMessage="Le prenom doit contenir au moins {{ limit }} caractères.")
      */
     private $prenom;
 

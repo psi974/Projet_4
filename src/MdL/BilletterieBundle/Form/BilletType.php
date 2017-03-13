@@ -25,7 +25,8 @@ class BilletType extends AbstractType
                 'attr' =>['placeholder' => 'Prénom du titulaire',
                           'class' => 'prenom']))
             ->add('pays',           CountryType::class, array(
-                'preferred_choices' => array('FR')))
+                'preferred_choices' => array('FR'),
+                'attr' =>['class' => 'pays']))
             ->add('dtNaissance',    BirthdayType::class, array(
                 'label' => 'Date de naissance',
                 'widget' => 'single_text',
