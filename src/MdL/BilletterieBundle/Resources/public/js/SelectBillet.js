@@ -45,7 +45,10 @@ $(document).ready(function() {
     var $addBillet =  $('<a href="#" id="add_billet" class="btn btn-info">Ajouter un billet</a>');
     $addBillet.insertBefore('.commander');
     $addBillet.click(function (e) {
-        addBillet($container);
+        if (!$addBillet.attr('disabled')) {
+            addBillet($container);
+        }
+        $('.nom:last').focus();
         e.preventDefault();
         return false;
     });
@@ -83,7 +86,7 @@ $(document).ready(function() {
         errNom = true;
         errPrenom = true;
 
-        //------------------------------------
+        ///------------------------------------
         //----DatePicker--Date de naissance---
         //------------------------------------
         $('.dtNaiss').datepicker({
@@ -119,36 +122,76 @@ $(document).ready(function() {
             return false;
         });
     }
-    //-------------------------------------
-    //---Message information tarif réduit--
-    //-------------------------------------
-    $($container).on('click', '.reduction', function(e) {
-        // Récupération ID du checkbox concerné
-        var $reducId = $("#"+$(this).attr('id'));
+    //-------------------------
+    //---Gestion tarif réduit--
+    //-------------------------
+    // Désactivation tarif réduit, si modification date de naissance
+    $container.on('change', '.dtNaiss', function(e) {
+        // Récupération ID du checkbox tarif réduit concerné
+        var $reducId = $("#" + $(this).attr('id').replace('dtNaissance','tarifReduit'));
+        $reducId.prop('checked', false);
+    });
+    $container.on('click', '.reduction', function(e) {
         $('.msgReduc').remove();
+        // Message d'erreur
         var $msg = $('<div class="alert alert-block alert-danger msgReduc" style="display:none"><h4 class="textMsg"></h4></div>');
-        var check = $($reducId).prop("checked");
-        if(check)
+        // Récupération ID du checkbox tarif réduit concerné
+        var $reducId = $("#" + $(this).attr('id'));
+        // Récupération ID date de naissance correspondante
+        var $dtNId = $("#" + $(this).attr('id').replace('tarifReduit', 'dtNaissance'));
+        // Calcul age du visiteur (pour interdiction tarif réduit si besoin)
+        var dateDuJour = new Date();
+        var dateNaissance = $dtNId.datepicker('getDate');
+        var age = dateDuJour.getFullYear() - dateNaissance.getFullYear();
+        if (dateDuJour.getMonth() < (dateNaissance.getMonth()))
         {
+            age--;
+        } else if((dateNaissance.getMonth() == dateDuJour.getMonth()) &&
+            (dateDuJour.getDate() < dateNaissance.getDate()))
+        {
+            age--;
+        }
+        if (age < 12) {
             $reducId.before($msg);
-            $('.textMsg').text('Attention, un justificatif vous sera demandé à l\'entrée du musée');
+            $('.textMsg').text('L\'age du titulaire du billet ne permet pas de sélectionner le tarif réduit');
             $('.msgReduc').addClass('has-danger').fadeIn(1000).delay(4000).fadeOut(2000);
+            $reducId.prop('checked', false);
+        } else
+        {
+            var check = $reducId.prop('checked');
+            if(check)
+            {
+                $reducId.before($msg);
+                $('.textMsg').text('Attention, un justificatif vous sera demandé à l\'entrée du musée');
+                $('.msgReduc').addClass('has-danger').fadeIn(1000).delay(4000).fadeOut(2000);
+            }
         }
     });
 
     //---------------------------------
     //---Message CTRL zones de saisie--
     //---------------------------------
+    $container.click(function (e) {
+        if (!errNom && !errPrenom)
+        {
+            $('.commander').attr('disabled', false);
+            $addBillet.attr('disabled', false);
+        } else
+        {
+            $('.commander').attr('disabled', true);
+            $addBillet.attr('disabled', true);
+        }
+    });
     // CTRL Zone de saisie du nom
     //----------------------------
-    $($container).on('focus' , '.nom' , function(e) {
+    $container.on('focus' , '.nom' , function(e) {
         // Suppression du message d'erreur sur la zone (si existant)
         var $msgNomIds = $(".msg" + $(this).attr('id'));
         if ($msgNomIds.length) {
             $msgNomIds.remove();
         }
     });
-    $($container).on('blur', '.nom' , function(e) {
+    $container.on('blur', '.nom' , function(e) {
         // Récupération ID du nom concerné
         var $nomId = $("#" + $(this).attr('id'));
         if(!$($nomId).val().match(/^[a-zA-ZàâéèêôùûçïëÀÂÉÈÔÙÛÏË-]{2,20}$/))
@@ -163,7 +206,7 @@ $(document).ready(function() {
             $('.msgNom').addClass($msgNomIdc);
             errNom = true;
             $('.commander').attr('disabled', true);
-            $('#add_billet').attr('disabled', true);
+            $addBillet.attr('disabled', true);
         }else
         {
             errNom = false;
@@ -172,20 +215,20 @@ $(document).ready(function() {
             if (!errNom && !errPrenom)
             {
                 $('.commander').attr('disabled', false);
-                $('#add_billet').attr('disabled', false);
+                $addBillet.attr('disabled', false);
             }
         }
     });
     // CTRL Zone de saisie du prénom
     //-------------------------------
-    $($container).on('focus' , '.prenom' , function(e) {
+    $container.on('focus' , '.prenom' , function(e) {
         // Suppression du message d'erreur sur la zone (si existant)
         var $msgPreNomIds = $(".msg" + $(this).attr('id'));
         if ($msgPreNomIds.length) {
             $msgPreNomIds.remove();
         }
     });
-    $($container).on('blur', '.prenom' , function(e) {
+    $container.on('blur', '.prenom' , function(e) {
         // Récupération ID du prenom concerné
         var $preNomId = $("#" + $(this).attr('id'));
         if(!$($preNomId).val().match(/^[a-zA-ZàâéèêôùûçïëÀÂÉÈÔÙÛÏË-]{2,20}$/))
@@ -200,7 +243,7 @@ $(document).ready(function() {
             $('.msgPreNom').addClass($msgPreNomIdc);
             errPrenom = true;
             $('.commander').attr('disabled', true);
-            $('#add_billet').attr('disabled', true);
+            $addBillet.attr('disabled', true);
         }else
         {
             errPrenom = false;
@@ -209,7 +252,7 @@ $(document).ready(function() {
             if (!errNom && !errPrenom)
             {
                 $('.commander').attr('disabled', false);
-                $('#add_billet').attr('disabled', false);
+                $addBillet.attr('disabled', false);
             }
         }
     });

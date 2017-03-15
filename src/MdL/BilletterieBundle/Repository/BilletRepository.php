@@ -15,8 +15,8 @@ class BilletRepository extends \Doctrine\ORM\EntityRepository
             ->join('b.commande', 'c')
             ->addSelect('c')
             ->where('c.dtVisite = :dtvisite')
-            ->setParameter('dtvisite', $dtvisite);
-
+            ->setParameter('dtvisite', $dtvisite)
+            ->andWhere('c.emailClient IS NOT NULL');
         return (int)count($qb->getQuery()->getResult());
     }
 }

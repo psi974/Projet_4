@@ -15,7 +15,7 @@ class MdLCalculPrix
             $dtNaiss = new \DateTime($dtNaiss);
             $diffan = $dtNaiss->diff(new \DateTime());
             $age = $diffan->y;
-            if ($billet->getTarifReduit() and $age >= 4) {
+            if ($billet->getTarifReduit() and $age >= 12) {
                 $prixtotal += 10;
             } else {
                 Switch (true) {
