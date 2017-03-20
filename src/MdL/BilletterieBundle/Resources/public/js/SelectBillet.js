@@ -35,7 +35,6 @@ $(document).ready(function() {
             $($infoBilletJ).attr("disabled",false);
         }
     });
-
     //---------------------------------
     //--Gestion des ajouts de billets--
     //---------------------------------
@@ -47,10 +46,10 @@ $(document).ready(function() {
     $addBillet.click(function (e) {
         if (!$addBillet.attr('disabled')) {
             addBillet($container);
+            e.preventDefault();
+            return false;
         }
         $('.nom:last').focus();
-        e.preventDefault();
-        return false;
     });
     $('.commander').addClass('pull-right');
     // Ajout automatique du premier champs
@@ -79,8 +78,8 @@ $(document).ready(function() {
             addDeleteLink($prototype);
         }
         // Ajout du nouveau prototype
-        $prototype.append('<hr>');
         $container.append($prototype);
+        // Gestion validation des données saisies
         $('.commander').attr('disabled', true);
         $('#add_billet').attr('disabled', true);
         errNom = true;
@@ -100,7 +99,8 @@ $(document).ready(function() {
         // Création de l'objet JQ pour la date de naissaince.
         var $dateNaiss = $('#mdl_billetteriebundle_commande_billets_'+ index +'_dtNaissance');
         $dateNaiss.datepicker('setDate', '01/01/1980');
-
+        $prototype.append('<h4 class="affPrix text-center well">Prix : 16 euros</h4>');
+        $('.affPrix:last').attr('id' , 'mdl_billetteriebundle_commande_billets_'+ index +'_prixBillet');
         // Incrémentation du compteur d'ajout
         index++;
     }
@@ -109,11 +109,12 @@ $(document).ready(function() {
     //------------------------------------
     function addDeleteLink($prototype) {
         // Création du lien
-        var $deleteLink = $('<a href="#" class="btn btn-danger">Supprimer</a>');
+        var $deleteLink = $('<a href="#" class="suppr btn btn-danger">Supprimer</a>');
         // Ajout du lien
         $prototype.append($deleteLink);
         // Ajout du listener sur le clic du lien pour supprimer le billet
         $deleteLink.click(function (e) {
+            // Suppression billet
             $prototype.remove();
             $('.nom:last').focus();
             $('.commander').attr('disabled', false);
@@ -122,19 +123,50 @@ $(document).ready(function() {
             return false;
         });
     }
-    //-------------------------
-    //---Gestion tarif réduit--
-    //-------------------------
-    // Désactivation tarif réduit, si modification date de naissance
+    //-------------------------------
+    //---Gestion Date de naissance---
+    //-------------------------------
     $container.on('change', '.dtNaiss', function(e) {
         // Récupération ID du checkbox tarif réduit concerné
         var $reducId = $("#" + $(this).attr('id').replace('dtNaissance','tarifReduit'));
+        // Désactivation tarif réduit, si modification date de naissance
         $reducId.prop('checked', false);
+        // Récupération ID date de naissance correspondante
+        var $dtNId = $("#" + $(this).attr('id'));
+        // Calcul age du visiteur (pour interdiction tarif réduit si besoin)
+        var dateDuJour = new Date();
+        var dateNaissance = $dtNId.datepicker('getDate');
+        var age = dateDuJour.getFullYear() - dateNaissance.getFullYear();
+        if (dateDuJour.getMonth() < (dateNaissance.getMonth())) {
+            age--;
+        } else if ((dateNaissance.getMonth() == dateDuJour.getMonth()) &&
+            (dateDuJour.getDate() < dateNaissance.getDate())) {
+            age--;
+        }
+        // Récupération ID de l'affichage tarif du billet
+        var $prixBilletId = $("#" + $(this).attr('id').replace('dtNaissance', 'prixBillet'));
+        // Affichage du prix du billet
+        if (age < 4)
+        {
+            $prixBilletId.text('Prix : 0 €');
+        }else if (age >= 4 && age < 12) {
+            $prixBilletId.text('Prix : 8 euros')
+        }else if (age >= 12 && age < 60) {
+            $prixBilletId.text('Prix : 16 euros');
+        } else {
+            $prixBilletId.text('Prix : 12 euros');
+        }
+
     });
+    //-------------------------
+    //---Gestion tarif réduit--
+    //-------------------------
     $container.on('click', '.reduction', function(e) {
         $('.msgReduc').remove();
         // Message d'erreur
         var $msg = $('<div class="alert alert-block alert-danger msgReduc" style="display:none"><h4 class="textMsg"></h4></div>');
+        // Récupération ID de l'affichage tarif du billet
+        var $prixBilletId = $("#" + $(this).attr('id').replace('tarifReduit', 'prixBillet'));
         // Récupération ID du checkbox tarif réduit concerné
         var $reducId = $("#" + $(this).attr('id'));
         // Récupération ID date de naissance correspondante
@@ -151,6 +183,17 @@ $(document).ready(function() {
         {
             age--;
         }
+        // Affichage du prix du billet si tarif réduit décoché
+        if (age < 4)
+        {
+            $prixBilletId.text('Prix : 0 €');
+        }else if (age >= 4 && age < 12) {
+            $prixBilletId.text('Prix : 8 euros')
+        }else if (age >= 12 && age < 60) {
+            $prixBilletId.text('Prix : 16 euros');
+        } else {
+            $prixBilletId.text('Prix : 12 euros');
+        }
         if (age < 12) {
             $reducId.before($msg);
             $('.textMsg').text('L\'age du titulaire du billet ne permet pas de sélectionner le tarif réduit');
@@ -164,7 +207,40 @@ $(document).ready(function() {
                 $reducId.before($msg);
                 $('.textMsg').text('Attention, un justificatif vous sera demandé à l\'entrée du musée');
                 $('.msgReduc').addClass('has-danger').fadeIn(1000).delay(4000).fadeOut(2000);
+                $prixBilletId.text('Prix : 10 euros');
             }
+        }
+    });
+
+    //------------------------------------------
+    //---Gestion affichage du prix du billet----
+    //------------------------------------------
+    $container.on('change', '.dtNaiss', function(e) {
+        // Récupération ID de l'affichage tarif du billet
+        var $prixBilletId = $("#" + $(this).attr('id').replace('dtNaissance', 'prixBillet'));
+        // Récupération ID date de naissance correspondante
+        var $dtNId = $("#" + $(this).attr('id'));
+        // Récupération ID tarif reduit correspondant
+        var $reducId = $("#" + $(this).attr('id').replace('dtNaissance', 'tarifReduit'));
+        // Calcul age du visiteur (pour interdiction tarif réduit si besoin)
+        var dateDuJour = new Date();
+        var dateNaissance = $dtNId.datepicker('getDate');
+        var age = dateDuJour.getFullYear() - dateNaissance.getFullYear();
+        if (dateDuJour.getMonth() < (dateNaissance.getMonth())) {
+            age--;
+        } else if ((dateNaissance.getMonth() == dateDuJour.getMonth()) &&
+            (dateDuJour.getDate() < dateNaissance.getDate())) {
+            age--;
+        }
+        if (age < 4)
+        {
+            $prixBilletId.text('Prix : 0 euros');
+        }else if (age >= 4 && age < 12) {
+            $prixBilletId.text('Prix : 8 euros')
+        }else if (age >= 12 && age < 60) {
+            $prixBilletId.text('Prix : 16 euros');
+        } else {
+            $prixBilletId.text('Prix : 12 euros');
         }
     });
 
@@ -256,7 +332,6 @@ $(document).ready(function() {
             }
         }
     });
-
     //---------------------------------
     //----DatePicker--Date de visite---
     //---------------------------------
