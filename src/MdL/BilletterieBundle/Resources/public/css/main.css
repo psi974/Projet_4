@@ -117,4 +117,6 @@ footer{
     background-image: linear-gradient(#c2c2c2, #a0a0a0 85%, #8b8b8b);
     border: 1px solid rgba(80, 91, 107, 0.8);
     border-bottom: 3px solid rgba(80, 91, 107, 0.8);
+    border-radius: 15px;
+    color: white;
 }

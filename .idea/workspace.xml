@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="f91678a4-8fa3-4270-ae50-c48ebfac44af" name="Default" comment="" />
+    <list default="true" id="f91678a4-8fa3-4270-ae50-c48ebfac44af" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/MdL/BilletterieBundle/Resources/public/css/main.css" afterPath="$PROJECT_DIR$/src/MdL/BilletterieBundle/Resources/public/css/main.css" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -29,7 +31,7 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="SelectBillet.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="SelectBillet.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/MdL/BilletterieBundle/Resources/public/js/SelectBillet.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="1140">
@@ -46,22 +48,22 @@
       <file leaf-file-name="SelectBillet.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/web/bundles/mdlbilletterie/js/SelectBillet.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="375">
-              <caret line="105" column="5" lean-forward="false" selection-start-line="105" selection-start-column="5" selection-end-line="105" selection-end-column="5" />
+            <state relative-caret-position="275">
+              <caret line="101" column="38" lean-forward="false" selection-start-line="101" selection-start-column="38" selection-end-line="101" selection-end-column="38" />
               <folding>
-                <marker date="1490016053450" expanded="true" signature="6717:6729" ph="..." />
-                <marker date="1490016053450" expanded="true" signature="11543:11555" ph="..." />
-                <marker date="1490016053450" expanded="true" signature="13239:13251" ph="..." />
+                <marker date="1490017117859" expanded="true" signature="6717:6729" ph="..." />
+                <marker date="1490017117859" expanded="true" signature="11543:11555" ph="..." />
+                <marker date="1490017117859" expanded="true" signature="13239:13251" ph="..." />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="main.css" pinned="false" current-in-tab="false">
+      <file leaf-file-name="main.css" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/MdL/BilletterieBundle/Resources/public/css/main.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="620">
-              <caret line="119" column="1" lean-forward="false" selection-start-line="119" selection-start-column="1" selection-end-line="119" selection-end-column="1" />
+            <state relative-caret-position="595">
+              <caret line="118" column="52" lean-forward="false" selection-start-line="118" selection-start-column="52" selection-end-line="118" selection-end-column="52" />
               <folding />
             </state>
           </provider>
@@ -70,7 +72,7 @@
       <file leaf-file-name="main.css" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/web/bundles/mdlbilletterie/css/main.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="595">
+            <state relative-caret-position="520">
               <caret line="118" column="52" lean-forward="false" selection-start-line="118" selection-start-column="52" selection-end-line="118" selection-end-column="52" />
               <folding />
             </state>
@@ -152,10 +154,10 @@
         <option value="$PROJECT_DIR$/src/MdL/BilletterieBundle/CalculPrix/MdLCalculPrix.php" />
         <option value="$PROJECT_DIR$/src/MdL/BilletterieBundle/Resources/views/SelectBillet/index.html.twig" />
         <option value="$PROJECT_DIR$/src/MdL/BilletterieBundle/Form/BilletType.php" />
-        <option value="$PROJECT_DIR$/src/MdL/BilletterieBundle/Resources/public/css/main.css" />
-        <option value="$PROJECT_DIR$/web/bundles/mdlbilletterie/css/main.css" />
-        <option value="$PROJECT_DIR$/web/bundles/mdlbilletterie/js/SelectBillet.js" />
         <option value="$PROJECT_DIR$/src/MdL/BilletterieBundle/Resources/public/js/SelectBillet.js" />
+        <option value="$PROJECT_DIR$/web/bundles/mdlbilletterie/js/SelectBillet.js" />
+        <option value="$PROJECT_DIR$/web/bundles/mdlbilletterie/css/main.css" />
+        <option value="$PROJECT_DIR$/src/MdL/BilletterieBundle/Resources/public/css/main.css" />
       </list>
     </option>
   </component>
@@ -1002,12 +1004,12 @@
       <workItem from="1489117923856" duration="29535000" />
       <workItem from="1489378216366" duration="35297000" />
       <workItem from="1489727308364" duration="871000" />
-      <workItem from="1489995924578" duration="20368000" />
+      <workItem from="1489995924578" duration="20766000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="591413000" />
+    <option name="totallyTimeSpent" value="591811000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1332,34 +1334,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/web/bundles/mdlbilletterie/css/main.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="595">
-          <caret line="118" column="52" lean-forward="false" selection-start-line="118" selection-start-column="52" selection-end-line="118" selection-end-column="52" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/MdL/BilletterieBundle/Resources/public/css/main.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="620">
-          <caret line="119" column="1" lean-forward="false" selection-start-line="119" selection-start-column="1" selection-end-line="119" selection-end-column="1" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/bundles/mdlbilletterie/js/SelectBillet.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="375">
-          <caret line="105" column="5" lean-forward="false" selection-start-line="105" selection-start-column="5" selection-end-line="105" selection-end-column="5" />
-          <folding>
-            <marker date="1490016053450" expanded="true" signature="6717:6729" ph="..." />
-            <marker date="1490016053450" expanded="true" signature="11543:11555" ph="..." />
-            <marker date="1490016053450" expanded="true" signature="13239:13251" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/MdL/BilletterieBundle/Resources/public/js/SelectBillet.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1140">
@@ -1369,6 +1343,34 @@
             <marker date="1490016061383" expanded="true" signature="11544:11556" ph="..." />
             <marker date="1490016061383" expanded="true" signature="13240:13252" ph="..." />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/bundles/mdlbilletterie/js/SelectBillet.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="275">
+          <caret line="101" column="38" lean-forward="false" selection-start-line="101" selection-start-column="38" selection-end-line="101" selection-end-column="38" />
+          <folding>
+            <marker date="1490017117859" expanded="true" signature="6717:6729" ph="..." />
+            <marker date="1490017117859" expanded="true" signature="11543:11555" ph="..." />
+            <marker date="1490017117859" expanded="true" signature="13239:13251" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/bundles/mdlbilletterie/css/main.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="520">
+          <caret line="118" column="52" lean-forward="false" selection-start-line="118" selection-start-column="52" selection-end-line="118" selection-end-column="52" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/MdL/BilletterieBundle/Resources/public/css/main.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="595">
+          <caret line="118" column="52" lean-forward="false" selection-start-line="118" selection-start-column="52" selection-end-line="118" selection-end-column="52" />
+          <folding />
         </state>
       </provider>
     </entry>
