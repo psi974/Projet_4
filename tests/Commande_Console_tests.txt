@@ -1,0 +1,2 @@
+vendor\bin\phpunit tests\MdL\BilletterieBundle\CalculPrix\MdLCalculPrixTest.php
+vendor\bin\phpunit tests\MdL\BilletterieBundle\CtrlNbBillet\MdLCtrlNbBilletTest.php
